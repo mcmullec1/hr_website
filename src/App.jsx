@@ -1,12 +1,9 @@
 
 import './App.css'
-import Monitor from './Monitor';
 import Monitors from './Monitors';
 import React, { useState, useEffect } from 'react';
-import { LineChart } from '@mui/x-charts/LineChart';
 import Box from '@mui/material/Box';
 import logo from "/logo.png"
-import download from "/download.png"
 import DownloadButton from './DownloadButton';
 
 function App() {
@@ -25,10 +22,7 @@ function App() {
                     'dark_green': '#063532'
   }
 
-  //const [connected, setConnected] = useState('Not Connected')
-  //const [hr, setHR] = useState('0');
-  //const [hrData, setHrData] = useState(new Array(200).fill(0))
-  //HELLLOOOOOOOOO
+
   
 
   if (navigator.bluetooth === undefined) {
@@ -42,28 +36,10 @@ function App() {
     }, []);
   }
 
-  /*
-  useEffect(() => {
-    console.log(time)
-  },[time])
-  */
 
 
 
   useEffect(() => {
-    /*
-    async function getTime(){
-        const now = new Date()
-        setTime(now)
-    }
-    getTime()
-  
-    var timer = setInterval(getTime, 30000)
-    console.log(time)
-    return function cleanup() {
-        clearInterval(timer)
-    }
-    */
 
     const interval = setInterval(() => {
       setTime(new Date());
