@@ -28,7 +28,7 @@ function App() {
   //const [connected, setConnected] = useState('Not Connected')
   //const [hr, setHR] = useState('0');
   //const [hrData, setHrData] = useState(new Array(200).fill(0))
-
+  //HELLLOOOOOOOOO
   
 
   if (navigator.bluetooth === undefined) {
