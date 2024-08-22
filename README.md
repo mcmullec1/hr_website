@@ -1,8 +1,5 @@
-# React + Vite
+# MSc Real-Time Display of Heart-Rate Monitor Data ♥️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The goal of this project is to provide a platform to access and view live heart-rate data from multiple Bluetooth enabled heart rate monitors. This project serves as my MSc Project at the University of Roehampton.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
