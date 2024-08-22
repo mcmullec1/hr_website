@@ -6,19 +6,31 @@ import EditableLabel from "react-inline-editing";
 
 function Monitor({timeInterval, colours, sendData, id}) {
 
-    const [supportText, setSupportText] = useState('');
+    //variable for connectivity, if a device is currently connected
     const [connected, setConnected] = useState('Not Connected')
+    
+    //variable for current heartrate value
     const [hr, setHR] = useState(0);
+
+    //variable for chart heartrate data
     const [hrData, setHrData] = useState(new Array(200).fill(0))
+    
+    //variable for connected device name
     const [deviceName, setDeviceName] = useState("N/A")
-    const [battery, setBattery] = useState("")
+
+    //variable for session data to pass to App for download
     const [sessionData, setSessionData] = useState({})
+
+    //current connected device given name, can be updated to user preference
     const [name, setName] = useState("P"+(id+1))
+
+    //current minimum heartrate to display
     const [min, setMin] = useState(0)
 
   
+    //runs every time the time interval changes
     useEffect(()=>{
-        //console.log("heart_rate at",timeInterval, hr)
+        //if a valid time interval, update session data with new time interval and hr
         if(timeInterval != null){
             let newSessionData = sessionData
             newSessionData[timeInterval.toString()] = hr
@@ -30,17 +42,16 @@ function Monitor({timeInterval, colours, sendData, id}) {
                 setMin(Math.min.apply(Math, Object.values(sessionData).filter(Boolean)))
             }
         }
-        //console.log(id, sessionData)
-        //console.log(min)
+        // send the new data to App to add to the overall session data
         sendData({"timeInterval":timeInterval.toString(), "hr":hr,"name":name, "id":id+1}, id)
-        //sessionData[timeInterval.toString()] = hr
-        //console.log(sessionData)
-        //console.log(hrData)
-        //console.log(sessionData)
-        //console.log(timeInterval)
+
     }, [timeInterval]);
 
+
+    //function that runs every time the hr broadcast changes
     function handleHrChange(event){
+
+        //clean the hr
         let value = event.target.value;
         let heartrate = value.getUint8(1);
 
@@ -48,65 +59,51 @@ function Monitor({timeInterval, colours, sendData, id}) {
         newData[newData.length] = heartrate
         newData = newData.slice(-200)
 
-        /*
-        let newSessionData = sessionData
-        newSessionData.push(heartrate)
-        console.log(newSessionData)
-        setSessionData(newSessionData)
-        */
-
+        //update hr and chart values
         setHrData(newData)
         setHR(heartrate)
 
     }
 
-    function handleBatteryChange(event){
-        let value = event.target.value;
-        let battery = value.getUint8(1);
-        console.log("The Battery",battery)
-        setBattery(battery)
 
-    }
-
-
+    //connection function, runs when the connect button is clicked
     async function toConnect() {
+
+        //use Bluetooth Web API to prompt popup of devices
         const device = await navigator.bluetooth.requestDevice({
             filters: [{ services: ['heart_rate'] }],
             acceptAllDevices: false,
             optionalServices: ['battery_service'],
             })
+        
+        //connect to device and update connection variables
         const server = await device.gatt.connect()
         setConnected("Connected")
         setDeviceName(device.name)
+
+        //handle disconnection
         device.addEventListener('gattserverdisconnected', () => {
             setConnected("Disconnected");
             setHR(0)
             setHrData(new Array(200).fill(0))
             });
 
-        //Heart Rate
+        //get heartrate characteristic broadcast
         const service = await server.getPrimaryService('heart_rate')
         const char = await service.getCharacteristic('heart_rate_measurement')
         char.startNotifications()
         char.addEventListener('characteristicvaluechanged', handleHrChange)
 
-        
-        //Battery
-        /*
-        const service2 = await server.getPrimaryService('battery_service')
-        const char2 = await service2.getCharacteristic('battery_level')
-        char2.startNotifications()
-        char2.addEventListener('characteristicvaluechanged', handleBatteryChange)
-        */
 
     }
 
-
+    //for display update colours based on connectivity
     let connected_text = colours["pink"]
     if(connected == "Connected"){
         connected_text = colours["light_green"]
     }
 
+    //for display update view if device connected
     let connect_display = "none"
     if(connected != "Connected"){
         connect_display = "flex"
@@ -115,6 +112,7 @@ function Monitor({timeInterval, colours, sendData, id}) {
 
     return (
         <>
+        {/* Monitor card */}
         <Box
             width={345}
             height={315}
@@ -128,6 +126,7 @@ function Monitor({timeInterval, colours, sendData, id}) {
             zIndex={1}
             position="relative"
         >
+            {/* Connect button popup */}
             <Box
                 width={345}
                 height={315}
@@ -141,12 +140,12 @@ function Monitor({timeInterval, colours, sendData, id}) {
             >
                 <button
                     onClick={() => toConnect()}
-                    /*backgroundColor={colours.light_green}*/
                     className='connect_button'
 
                 >CONNECT</button>
             </Box>
         
+            {/* Once connected, metrics view */}
             <Box
                 height="25%"
                 display="flex"
@@ -234,14 +233,6 @@ function Monitor({timeInterval, colours, sendData, id}) {
                 <Box
                     color={connected_text}
                 >{connected}</Box>
-                {/*<p>{battery}</p>*/}
-                {/*}
-                <button
-                    onClick={() => toConnect()}
-                    className='connect_button'
-
-                >CONNECT</button>
-                */}
             </Box>
 
         </Box>

@@ -6,14 +6,19 @@ import Box from '@mui/material/Box';
 import logo from "/logo.png"
 import DownloadButton from './DownloadButton';
 
+
 function App() {
 
+  //current time interval variable
   const [time, setTime] = useState(new Date())
 
+  //bluetooth browser support variable
   const [supportText, setSupportText] = useState('');
 
+  //session data variable for export
   const [overallSessionData, setOverallSessionData] = useState([])
 
+  //colours to be used throughout the project
   const colours = { 'blue': '#3EA9E0',
                     'plum' : '#3F1D4E',
                     'lime': '#C7D540',
@@ -25,6 +30,7 @@ function App() {
 
   
 
+//to handle browsers that do not support Web Bluetooth API
   if (navigator.bluetooth === undefined) {
     useEffect(()=>{
       setSupportText('Bluetooth is not supported.');
@@ -38,7 +44,7 @@ function App() {
 
 
 
-
+//to update the time variable every 5 seconds
   useEffect(() => {
 
     const interval = setInterval(() => {
@@ -46,114 +52,29 @@ function App() {
     }, 5000);
 
     return () => clearInterval(interval);
-
-  }, [])
+    }, [])
 
 
     const handleDownload = () => {
       console.log("Download")
     }
       
-    /*
-    function handleHrChange(event){
-      let value = event.target.value;
-      let heartrate = value.getUint8(1);
-      let newData = hrData
-      newData[newData.length] = heartrate
-      newData = newData.slice(-200)
-      setHrData(newData)
-
-      setHR(heartrate)
-
-    }
-   
-
-    async function toConnect() {
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [{ services: ['heart_rate'] }],
-          acceptAllDevices: false,
-        })
-        const server = await device.gatt.connect()
-        setConnected("Connected")
-        device.addEventListener('gattserverdisconnected', () => {
-          setConnected("Disconnected");
-          setHR('0')
-          setHrData(new Array(200).fill(0))
-         });
-
-        //Heart rate
-        const service = await server.getPrimaryService('heart_rate')
-        const char = await service.getCharacteristic('heart_rate_measurement')
-        char.startNotifications()
-        char.addEventListener('characteristicvaluechanged', handleHrChange)
-
-        const service2 = await server.getPrimaryService('battery_service')
-        const char2 = await service.getCharacteristic('battery_level')
-        char2.startNotifications()
-        char2.addEventListener('characteristicvaluechanged', handleBatteryChange)
-
-    }
-
-  */
-
-  /*
-  useEffect(()=>{
-    console.log("heart_rate", hr)
-    console.log(hrData)
-  }, [hr]);
-  */
-
+    
+  // adding new entries to the overall session data
+  //called from the child Monitor component to update in App
   function handleSessionData(data, id){
-    //console.log("THING TO ADD:")
-    //console.log(data)
     let newSessionData = overallSessionData
     newSessionData.push(data)
     setOverallSessionData(newSessionData)
     console.log(overallSessionData)
-    //let new_item = {"timeInveral":data.}
     
   }
 
 
 
-  
-
   return (
     <>
-      {/*<button id = "connect_button" ref = {connect_button}>Connect</button>*/}
-      {/*
-      <Box
-        display = "flex"
-        width = "100%"
-      >
-        <Box>
-          <p id ="supported">{supportText}</p>
-          <p>{connected}</p>
-          <button onClick={() => toConnect()}>Connect</button>
-          <p id = "p_text" >{hr}</p>
-        </Box>
-      <LineChart skipAnimation
-
-        yAxis={[
-          {
-            min: 50,
-            max: 160,
-          },
-        ]}  
-        series={[
-          {
-            data: hrData,
-            area: true,
-            showMark: false,
-          },
-        ]}
-        bottomAxis={null}
-        grid={{ horizontal: true }}
-        width={300}
-        height={200}
-      />
-      </Box>
-      */}
+     {/* Header */}
       <Box
         width="100%"
         height="75px"
@@ -165,6 +86,8 @@ function App() {
         justifyContent="space-between"
         alignItems="center"
       >
+
+        {/* Logo */}
         <Box
           component="img"
           sx={{
@@ -173,41 +96,20 @@ function App() {
           alt="University of Roehampton Logo."
           src={logo}
         ></Box>
-        <p className="bluetooth" >{supportText}</p>
-        <DownloadButton colours = {colours} overallSessionData = {overallSessionData}></DownloadButton>
-        {/*
-        <button className='download_button' onClick={handleDownload}>
-          <Box
-          height="50px"
-          width="50px"
-          backgroundColor={colours["light_green"]}
-          borderRadius="100%"
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-          //marginRight="20px"
-          //marginLeft="64px"
-          >
-            <Box
-              component="img"
-              sx={{
-                height: "30px",
-              }}
-              alt="Download symbol."
-              src={download}
-            ></Box>
-          </Box>
-        </button>
-      */}
 
+        {/* Bluetooth message */}
+        <p className="bluetooth" >{supportText}</p>
+
+        {/* Download Button */}
+        <DownloadButton colours = {colours} overallSessionData = {overallSessionData}></DownloadButton>
       </Box>
+
+      {/* Monitor Grid */}
       <Box
         display="flex"
         justifyContent="space-around"
         width="100%"
       >
-        {/*<Monitor timeInterval={time} id = {1}></Monitor>
-        <Monitor timeInterval={time} id = {2}></Monitor>*/}
         <Monitors timeInterval={time} monitor_count = {6} colours = {colours} sendData={handleSessionData}></Monitors>
       </Box>
       
