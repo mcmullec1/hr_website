@@ -1,8 +1,35 @@
-# React + Vite
+# Real-Time Display of Heartrate Monitor Data ♥️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The goal of this project is to provide a platform to access and view live heart-rate data from multiple Bluetooth enabled heart rate monitors. This project serves as my MSc Project at the University of Roehampton.
 
-Currently, two official plugins are available:
+#### Files:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+##### App.jsx
+- handles the time interval to coordinate data storing in child components
+- stores overall session data in an object
+- includes HTML for header, including the download button
+
+##### Monitors.jsx
+- includes HTML to render grid of child "Monitor" components
+
+##### Monitor.jsx
+- handles connection to heartrate monitoring devices using the Web Bluetooth API
+- recieves heartrate values and stores data in state variables
+- includes HTML for a "Monitor" card that prompts a user to connect to a device and then view live heartrate data from the corresponing device
+
+##### DownloadButton.jsx
+- handles converting the JSON object data to CSV format and writing this data to a downloadable CSV file
+- includes HTML for the download button
+
+##### main.jsx
+- renders App.jsx
+
+##### index.html
+- runs main.jsx script
+
+##### App.css & index.css
+- includes CSS styling for both App.jsx and index.html
+
+
+
+
