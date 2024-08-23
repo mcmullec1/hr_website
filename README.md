@@ -30,6 +30,8 @@ The goal of this project is to provide a platform to access and view live heart-
 ##### App.css & index.css
 - includes CSS styling for both App.jsx and index.html
 
-
+##### deploy.yml
+- to build and deploy the website via GitPages
+- code from https://github.com/sitek94/vite-deploy-demo/tree/main#readme
 
 
