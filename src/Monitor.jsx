@@ -221,6 +221,7 @@ function Monitor({timeInterval, colours, sendData, id}) {
                         inputHeight="25px"
                         inputMaxLength={20}
                         onFocusOut={setName}
+                        
                     />
                    
 

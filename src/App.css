@@ -12,6 +12,10 @@
 .nameLabel{
     font-size: 18pt;
 }
+
+.nameLabel:hover {
+    cursor: pointer;
+}
   
 
 .connect_button{
