@@ -43,6 +43,7 @@ function Monitor({timeInterval, colours, sendData, id}) {
             }
         }
         // send the new data to App to add to the overall session data
+        console.log(name)
         sendData({"timeInterval":timeInterval.toString(), "hr":hr,"name":name, "id":id+1}, id)
 
     }, [timeInterval]);
@@ -219,7 +220,7 @@ function Monitor({timeInterval, colours, sendData, id}) {
                         inputWidth="200px"
                         inputHeight="25px"
                         inputMaxLength={20}
-                        onChange={e => setName(e.target.value)}
+                        onFocusOut={setName}
                     />
                    
 
