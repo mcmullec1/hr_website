@@ -2,6 +2,10 @@
 
 The goal of this project is to provide a platform to access and view live heart rate data from multiple Bluetooth enabled heart rate monitors. This project serves as my MSc Project at the University of Roehampton.
 
+### Deployed Website:
+
+https://mcmullec1.github.io/hr_website/
+
 #### Files:
 
 ##### App.jsx
