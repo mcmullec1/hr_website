@@ -5,6 +5,8 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import logo from "/logo.png"
 import DownloadButton from './DownloadButton';
+import start from "/start.png"
+import stop from "/stop.png"
 
 
 function App() {
@@ -17,6 +19,16 @@ function App() {
 
   //session data variable for export
   const [overallSessionData, setOverallSessionData] = useState([])
+
+  //start time
+  const [startTime, setStartTime] = useState(new Date());
+
+  //stop time
+  const [stopTime, setStopTime] = useState('');
+
+  //recording
+
+  const [recording, setRecording] = useState(false);
 
   //colours to be used throughout the project
   const colours = { 'blue': '#3EA9E0',
@@ -54,7 +66,7 @@ function App() {
     return () => clearInterval(interval);
     }, [])
 
-
+      
     const handleDownload = () => {
       console.log("Download")
     }
@@ -67,6 +79,22 @@ function App() {
     newSessionData.push(data)
     setOverallSessionData(newSessionData)
     console.log(overallSessionData)
+    //console.log(recording)
+    console.log("start",startTime)
+    //console.log("stop",stopTime)
+    
+  }
+
+  function handleRecord(){
+    if(recording == false){
+      setRecording(true)
+      setStartTime(new Date())
+    }
+
+    if(recording == true){
+      setRecording(false)
+      setStopTime(new Date())
+    }
     
   }
 
@@ -100,8 +128,31 @@ function App() {
         {/* Bluetooth message */}
         <p className="bluetooth" >{supportText}</p>
 
+        {/*Start Stop*/}
+        <Box>
+        <button className='download_button' onClick={() => handleRecord()}>
+          <Box
+            height="100%"
+            width="100%"
+            //backgroundColor={colours["light_green"]}
+            backgroundColor = {recording === true ? 'red' : colours["light_green"]}
+            borderRadius="100%"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+          >
+            <Box
+              component="img"
+              sx={{height: "30px",}}
+              alt="Download symbol."
+              src={recording === true ? stop : start}
+            ></Box>
+          </Box>
+        </button>
+        </Box>
+
         {/* Download Button */}
-        <DownloadButton colours = {colours} overallSessionData = {overallSessionData}></DownloadButton>
+        <DownloadButton colours = {colours} overallSessionData = {overallSessionData} startTime = {startTime} stopTime = {stopTime}></DownloadButton>
       </Box>
 
       {/* Monitor Grid */}

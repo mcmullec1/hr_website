@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import download from "/download.png"
 
-function DownloadButton({colours, overallSessionData}) {
+function DownloadButton({colours, overallSessionData, startTime, stopTime}) {
 
     //define the column names for the data
     const header_names = [
@@ -33,13 +33,26 @@ function DownloadButton({colours, overallSessionData}) {
     //function to run when download button is clicked
     const handleDownload = (data, header_names) => {
 
+        //if no stop time
+        if(stopTime == ''){
+          stopTime = new Date()
+        }
+
+        let filtered_data = data.filter(x => {
+          return ((new Date(x.timeInterval) > startTime) && (new Date(x.timeInterval)< stopTime));
+        });
+        console.log("THIS IS THE FILTERED DATA")
+        console.log(filtered_data)
+
         //get CSV string data
-        const csv_data = jsonToCSV(data, header_names);
+        const csv_data = jsonToCSV(filtered_data, header_names);
+
 
         //if no data alert
         if (csv_data === '') {
           alert('Export failed.');
         }
+
         
         //create CSV item with blob, create link on page and click it to download, then remove
         else {
